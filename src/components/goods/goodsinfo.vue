@@ -32,7 +32,7 @@
                                             <ul class="clearfix animation03">
                                                 <li v-for="item in goodsData.imglist" :key="item.id">
                                                     <div class="small-img">
-                                                        <img :src="item.original_path" />
+                                                        <img :src="item.original_path"/>
                                                     </div>
                                                 </li>
                                             </ul>
@@ -69,10 +69,12 @@
                                         <dt>购买数量</dt>
                                         <dd>
                                             <div class="stock-box">
-                                                <el-input-number size="small" v-model="goodsCount" :min="1" :max="goodsData.goodsinfo.stock_quantity"></el-input-number>
+                                                <el-input-number size="small" v-model="goodsCount" :min="1"
+                                                                 :max="goodsData.goodsinfo.stock_quantity"></el-input-number>
                                             </div>
                                             <span class="stock-txt">
                                                 库存
+                                                <!-----------------------插件--------------------------->
                                                 <em id="commodityStockNum">{{goodsData.goodsinfo.stock_quantity}}</em>件
                                             </span>
                                         </dd>
@@ -80,8 +82,11 @@
                                     <dl>
                                         <dd>
                                             <div id="buyButton" class="btn-buy">
-                                                <button onclick="cartAdd(this,'/',1,'/shopping.html');" class="buy">立即购买</button>
-                                                <button onclick="cartAdd(this,'/',0,'/cart.html');" class="add">加入购物车</button>
+                                                <button onclick="cartAdd(this,'/',1,'/shopping.html');" class="buy">
+                                                    立即购买
+                                                </button>
+                                                <button onclick="cartAdd(this,'/',0,'/cart.html');" class="add">加入购物车
+                                                </button>
                                             </div>
                                         </dd>
                                     </dl>
@@ -89,16 +94,18 @@
                             </div>
                         </div>
                         <div id="goodsTabs" class="goods-tab bg-wrap">
-                            <div id="tabHead" class="tab-head" style="position: static; top: 517px; width: 925px;">
-                                <ul>
-                                    <li @click="isShowIntroduction = true">
-                                        <a href="javascript:;" :class="{selected:isShowIntroduction}">商品介绍</a>
-                                    </li>
-                                    <li @click="isShowIntroduction = false">
-                                        <a :class="{selected:!isShowIntroduction}" href="javascript:;">商品评论</a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <Affix>
+                                <div id="tabHead" class="tab-head" style="position: static; top: 517px; width: 925px;">
+                                    <ul>
+                                        <li @click="isShowIntroduction = true">
+                                            <a href="javascript:;" :class="{selected:isShowIntroduction}">商品介绍</a>
+                                        </li>
+                                        <li @click="isShowIntroduction = false">
+                                            <a :class="{selected:!isShowIntroduction}" href="javascript:;">商品评论</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </Affix>
                             <!-- 商品介绍 -->
                             <div v-show="isShowIntroduction" class="tab-content entry" style="display: block;">
                                 <p style="padding:5px;" v-html="goodsData.goodsinfo.content"></p>
@@ -112,53 +119,56 @@
                                         </div>
                                         <div class="conn-box">
                                             <div class="editor">
-                                                <textarea id="txtContent" name="txtContent" sucmsg=" " datatype="*10-1000" nullmsg="请填写评论内容！"></textarea>
+                                                <!------------------ref使用--------------------------------------->
+                                                <textarea ref="txtContentRef" id="txtContent" name="txtContent" sucmsg=" "
+                                                          datatype="*10-1000" nullmsg="请填写评论内容！"></textarea>
                                                 <span class="Validform_checktip"></span>
                                             </div>
                                             <div class="subcon">
-                                                <input id="btnSubmit" name="submit" type="submit" value="提交评论" class="submit">
+                                                <input id="btnSubmit" name="submit" type="submit" value="提交评论" @click="postComment"
+                                                       class="submit">
                                                 <span class="Validform_checktip"></span>
                                             </div>
                                         </div>
                                     </div>
+                                    <!----------------------商品评论------------------------------->
                                     <ul id="commentList" class="list-box">
-                                        <p style="margin: 5px 0px 15px 69px; line-height: 42px; text-align: center; border: 1px solid rgb(247, 247, 247);">暂无评论，快来抢沙发吧！</p>
-                                        <li>
+                                        <!--------------------数据为0的时候显示------------------------->
+                                        <p v-if="commentInfo.totalcount === 0"
+                                           style="margin: 5px 0px 15px 69px; line-height: 42px; text-align: center; border: 1px solid rgb(247, 247, 247);">
+                                            暂无评论，快来抢沙发吧！</p>
+
+                                        <li v-for="item in commentInfo.message" :key="item.id">
                                             <div class="avatar-box">
                                                 <i class="iconfont icon-user-full"></i>
                                             </div>
                                             <div class="inner-box">
                                                 <div class="info">
-                                                    <span>匿名用户</span>
-                                                    <span>2017/10/23 14:58:59</span>
+                                                    <span>{{item.user_name}}</span>
+                                                    <!-----------------------自己添加样式---------------------------->
+                                                    <span>{{item.add_time | dateFmt('YYYY-MM-DD HH:mm:ss')}}</span>
                                                 </div>
-                                                <p>testtesttest</p>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="avatar-box">
-                                                <i class="iconfont icon-user-full"></i>
-                                            </div>
-                                            <div class="inner-box">
-                                                <div class="info">
-                                                    <span>匿名用户</span>
-                                                    <span>2017/10/23 14:59:36</span>
-                                                </div>
-                                                <p>很清晰调动单很清晰调动单</p>
+                                                <p>{{item.content}}</p>
                                             </div>
                                         </li>
                                     </ul>
+                                    <!---------------------------分页条的位置--------------------------------->
                                     <div class="page-box" style="margin: 5px 0px 0px 62px;">
-                                        <div id="pagination" class="digg">
-                                            <span class="disabled">« 上一页</span>
-                                            <span class="current">1</span>
-                                            <span class="disabled">下一页 »</span>
-                                        </div>
+                                        <el-pagination
+                                                @size-change="handleSizeChange"
+                                                @current-change="handleCurrentChange"
+                                                :current-page="pageIndex"
+                                                :page-sizes="[2, 5, 10, 20]"
+                                                :page-size="pageSize"
+                                                layout="total, sizes, prev, pager, next, jumper"
+                                                :total="commentInfo.totalcount">
+                                        </el-pagination>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!---------------------右边推荐商品------------------------------->
                     <div class="left-220">
                         <div class="bg-wrap nobg">
                             <div class="sidebar-box">
@@ -166,12 +176,13 @@
                                 <ul class="side-img-list">
                                     <li v-for="item in goodsData.hotgoodslist" :key="item.id">
                                         <div class="img-box">
-                                            <a href="#/site/goodsinfo/90" class="">
+                                            <!------------监控路由--------------->
+                                            <router-link :to="'/goodsinfo/'+item.id" class="">
                                                 <img v-lazy="item.img_url">
-                                            </a>
+                                            </router-link>
                                         </div>
                                         <div class="txt-box">
-                                            <a href="#/site/goodsinfo/90" class="">{{item.title}}</a>
+                                            <router-link :to="'/goodsinfo/'+item.id" class="">{{item.title}}</router-link>
                                             <span>{{item.add_time | dateFmt}}</span>
                                         </div>
                                     </li>
@@ -197,30 +208,106 @@
     window.jQuery = $
 
 
-    // 导入放大镜插件
+    // 3按需导入图钉
+    import {Affix} from 'iview'
+
+
+    //2 导入放大镜插件
     import '../../statics/site/jqimgzoom/js/magnifier'
+
     export default {
-        data(){
+        components: {Affix},
+        data() {
             return {
-                goodsData:{},
-                goodsCount:1 ,  // 商品数量
-                isShowIntroduction:true,//是否显示商品介绍
+                goodsData: {},
+                goodsCount: 1,  // 商品数量
+                isShowIntroduction: true,//是否显示商品介绍
+                pageIndex: 1, // 页码 默认从第一页开始查
+                pageSize: 2, // 页容量，每页默认2条
+                commentInfo: {}, // 评论信息
+
+
             }
         },
-        created(){
+        created() {
             this.getGoodsInfoData()
+            this.getCommentInfoData()
         },
-        updated(){// data发生了变化并且，视图已经渲染完毕了
-            $('#magnifier1').imgzoon({magnifier:'#magnifier1'})
+        watch: {
+            $route: function() {
+                // 重新获取数据
+                this.getGoodsInfoData()
+                this.getCommentInfoData()
+            }
         },
-        methods:{
-            getGoodsInfoData(){
+        updated() {// data发生了变化并且，视图已经渲染完毕了
+            $('#magnifier1').imgzoon({magnifier: '#magnifier1'})
+        },
+
+        methods: {
+            /*1*/
+            getGoodsInfoData() {
                 const url = `site/goods/getgoodsinfo/${this.$route.params.goodsid}`
-                this.$axios.get(url).then(response=>{
+                this.$axios.get(url).then(response => {
                     this.goodsData = response.data.message
                 })
+            },
+            // 4获取评论数据
+            getCommentInfoData() {
+                const url = `site/comment/getbypage/goods/${
+                    this.$route.params.goodsid
+                    }?pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`
+
+                this.$axios.get(url).then(response => {
+                    this.commentInfo = response.data
+                })
+            },
+            // 分页相关
+            // 页容量改变
+            handleSizeChange(pageSize) {
+                this.pageSize = pageSize
+                this.pageIndex = 1
+
+                this.getCommentInfoData()
+            },
+            // 当前页码改变
+            handleCurrentChange(pageIndex) {
+                this.pageIndex = pageIndex
+
+                this.getCommentInfoData()
+            },
+            //5提交评论
+            postComment(){
+                let textContent=this.$refs.txtContentRef
+                if (textContent.value.trim().length==0){
+                    //警告插件使用
+                    this.$message({
+                        message:'评论内容不能为空!',
+                        type:'warning'
+                    })
+                    return
+                }
+                this.$axios.post(`site/validate/comment/post/goods/${this.$route.params.goodsid}`,
+                    {commenttxt: textContent.value}).then(res=>{
+                        if (res.data.status==0){
+                            // 清空原先填写内容
+                            textContent.value=''
+                            //成功
+                            this.$message({
+                                message: '评论成功!',
+                                type: 'success'
+                            })
+                            // 重新加载第一页数据
+                            this.pageIndex = 1
+                            this.getCommentInfoData()
+                        }
+
+                })
             }
-        }
+
+        },
+
+
     }
 </script>
 
