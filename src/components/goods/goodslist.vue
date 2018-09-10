@@ -86,7 +86,7 @@
                 <div class="wrap-box">
                     <ul class="img-list">
                         <li v-for="subitem in item.datas" :key="subitem.artID">
-                            <a href="#/site/goodsinfo/87" class="">
+                            <router-link :to="'/goodsinfo/'+subitem.artID" class="">
                                 <div class="img-box">
                                     <img v-lazy="subitem.img_url">
                                 </div>
@@ -101,7 +101,7 @@
                                         </span>
                                     </p>
                                 </div>
-                            </a>
+                            </router-link>
                         </li>
                     </ul>
                 </div>
@@ -119,7 +119,6 @@
 
 
 <script>
-import axios from 'axios'
 
 export default {
   data() {
@@ -134,21 +133,21 @@ export default {
   },
   methods: {
     // 获取头部的数据(分类、轮播、排行榜)
-    getTopData() {
-      const url = `http://47.106.148.205:8899/site/goods/gettopdata/goods`
-
-      axios.get(url).then(response => {
-        this.topData = response.data.message
-      })
+      /*
+      *
+      *
+      * */
+      getTopData() {
+          this.$axios.get(`site/goods/gettopdata/goods`).then(response => {
+              this.topData = response.data.message
+          })
     },
     // 获取商品列表的数据
-    getGoodsGroupData() {
-      const url = `http://47.106.148.205:8899/site/goods/getgoodsgroup`
-
-      axios.get(url).then(response => {
-        this.goodsList = response.data.message
-      })
-    }
+      getGoodsGroupData() {
+          this.$axios.get(`site/goods/getgoodsgroup`).then(response => {
+              this.goodsList = response.data.message
+          })
+      }
   }
 }
 </script>

@@ -12,6 +12,12 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 // 在浏览器端建议使用 import es6的module形式导入模块
 import router from './router'
+/*
+* 网络请求
+* */
+import axios from 'axios'
+axios.defaults.baseURL = 'http://47.106.148.205:8899/'
+Vue.prototype.$axios = axios
 
 // 导入过滤器
 import './filters'
