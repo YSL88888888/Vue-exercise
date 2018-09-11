@@ -86,6 +86,7 @@
                 <div class="wrap-box">
                     <ul class="img-list">
                         <li v-for="subitem in item.datas" :key="subitem.artID">
+                            <!-------------------------路由跳转详情页面--------------------------------->
                             <router-link :to="'/goodsinfo/'+subitem.artID" class="">
                                 <div class="img-box">
                                     <img v-lazy="subitem.img_url">
@@ -128,6 +129,9 @@ export default {
     }
   },
   created() {
+      /*
+      * 注意this
+      * */
     this.getTopData()
     this.getGoodsGroupData()
   },
@@ -138,6 +142,9 @@ export default {
       *
       * */
       getTopData() {
+          /*
+          * 注意this
+          * */
           this.$axios.get(`site/goods/gettopdata/goods`).then(response => {
               this.topData = response.data.message
           })

@@ -69,6 +69,7 @@
                                         <dt>购买数量</dt>
                                         <dd>
                                             <div class="stock-box">
+                                                <!---------------------------------------------------------------->
                                                 <el-input-number size="small" v-model="goodsCount" :min="1"
                                                                  :max="goodsData.goodsinfo.stock_quantity"></el-input-number>
                                             </div>
@@ -223,10 +224,10 @@
 </style>
 
 <script>
-    import $ from "jquery"
+   /* import $ from "jquery"
     // 把导入的jquery挂在到window
     window.$ = $
-    window.jQuery = $
+    window.jQuery = $*/
 
 
     // 3按需导入图钉
