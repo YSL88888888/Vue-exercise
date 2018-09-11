@@ -85,8 +85,7 @@
                                                 <button onclick="cartAdd(this,'/',1,'/shopping.html');" class="buy">
                                                     立即购买
                                                 </button>
-                                                <button onclick="cartAdd(this,'/',0,'/cart.html');" class="add">加入购物车
-                                                </button>
+                                                <button @click="addToShopCart" ref="addToShopCartRef" class="add">加入购物车</button>
                                             </div>
                                         </dd>
                                     </dl>
@@ -193,10 +192,32 @@
                 </div>
             </div>
         </div>
+        <!-- 3.0 被动画元素--------------------------------------- -->
+        <transition
+                v-on:before-enter="beforeEnter"
+                v-on:enter="enter"
+                v-on:after-enter="afterEnter">
+            <div ref="animateDivRef" v-show="isShow" v-if="goodsData.imglist" class="animateDiv">
+                <img :src="goodsData.imglist[0].original_path" alt="">
+            </div>
+        </transition>
     </div>
 </template>
 
 <style scoped>
+
+    .animateDiv {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 50px;
+        height: 50px;
+    }
+
+    .animateDiv img {
+        width: 100%;
+        height: 100%;
+    }
     @import '../../statics/site/jqimgzoom/css/magnifier.css';
 
 </style>
@@ -225,8 +246,7 @@
                 pageIndex: 1, // 页码 默认从第一页开始查
                 pageSize: 2, // 页容量，每页默认2条
                 commentInfo: {}, // 评论信息
-
-
+                isShow:false
             }
         },
         created() {
@@ -245,11 +265,26 @@
         },
 
         methods: {
-            /*1*/
+            /*1获取商品详情*/
             getGoodsInfoData() {
                 const url = `site/goods/getgoodsinfo/${this.$route.params.goodsid}`
                 this.$axios.get(url).then(response => {
                     this.goodsData = response.data.message
+                    /*
+                    * 6动画
+                    * */
+
+                    // 获取被动画元素动画开始和结束时候的偏移量
+                    setTimeout(() => {
+                        // 获取动画开始时候的偏移量
+                        this.addToShopCartOffset = $(this.$refs.addToShopCartRef).offset()
+
+                        // 设置被动画元素的位置
+                        $(this.$refs.animateDivRef).offset(this.addToShopCartOffset)
+
+                        // 获取动画结束时候的偏移量
+                        this.shoppingCartCountOffset = $('#shoppingCartCount').offset()
+                    }, 200)
                 })
             },
             // 4获取评论数据
@@ -287,6 +322,9 @@
                     })
                     return
                 }
+                /*
+                * 获取路由id  要加this
+                * */
                 this.$axios.post(`site/validate/comment/post/goods/${this.$route.params.goodsid}`,
                     {commenttxt: textContent.value}).then(res=>{
                         if (res.data.status==0){
@@ -303,11 +341,36 @@
                         }
 
                 })
+            },
+            // 加入购物车
+            addToShopCart() {
+                this.isShow = true
+            },
+            // 动画相关
+            beforeEnter: function(el) {
+                el.style.left = `${this.addToShopCartOffset.left}px`
+                el.style.top = `${this.addToShopCartOffset.top}px`
+                el.style.transform = `scale(1)`
+            },
+            // 此回调函数是可选项的设置
+            // 与 CSS 结合时使用
+            enter: function(el, done) {
+                el.style.transition = 'all .5s'
+
+                // 刷新动画帧
+                el.offsetWidth
+
+                el.style.left = `${this.shoppingCartCountOffset.left}px`
+                el.style.top = `${this.shoppingCartCountOffset.top}px`
+                el.style.transform = `scale(0.5)`
+
+                // ...
+                done()
+            },
+            afterEnter: function() {
+                this.isShow = false
             }
-
-        },
-
-
+        }
     }
 </script>
 

@@ -6,7 +6,7 @@
       <div class="head-top">
         <div class="section">
           <div class="left-box">
-            <span>黑马买买买</span>
+            <span>四不像买卖</span>
             <a target="_blank" href="#"></a>
             <a target="_blank" href="#"></a>
           </div>
@@ -24,8 +24,8 @@
               <strong>|</strong>
             </span>
             <a href="" class="">
-              <i class="iconfont icon-cart"></i>购物车(
-              <span id="shoppingCartCount">
+              <i id="shoppingCartCount" class="iconfont icon-cart"></i>购物车(
+              <span>
                 <span>4</span>
               </span>)</a>
           </div>
@@ -104,7 +104,7 @@
         </div>
         <div class="foot-box">
           <div class="copyright">
-            <p>版权所有 黑马买买买 </p>
+            <p>版权所有 小卖部的故事 </p>
             <p>公司地址： 联系电话：</p>
             <p class="gray">Copyright © 2009-2018 itcast Corporation,All Rights Reserved.</p>
           </div>
@@ -121,46 +121,50 @@
 
 <script>
 // 导入jquery
-import $ from "jquery"
+import $ from 'jquery'
 // 把导入的jquery挂在到window
 window.$ = $
 window.jQuery = $
 
+//按需导入图钉
+import { Affix } from 'iview'
+
 export default {
   // App template的内容渲染到浏览器之后调用
+  components: { Affix },
   mounted() {
-    $("#menu2 li a").wrapInner('<span class="out"></span>');
-    $("#menu2 li a").each(function() {
-      $('<span class="over">' + $(this).text() + "</span>").appendTo(this);
-    });
+    $('#menu2 li a').wrapInner('<span class="out"></span>')
+    $('#menu2 li a').each(function() {
+      $('<span class="over">' + $(this).text() + '</span>').appendTo(this)
+    })
 
-    $("#menu2 li a").hover(
+    $('#menu2 li a').hover(
       function() {
-        $(".out", this)
+        $('.out', this)
           .stop()
-          .animate({ top: "48px" }, 300); // move down - hide
-        $(".over", this)
+          .animate({ top: '48px' }, 300) // move down - hide
+        $('.over', this)
           .stop()
-          .animate({ top: "0px" }, 300); // move down - show
+          .animate({ top: '0px' }, 300) // move down - show
       },
       function() {
-        $(".out", this)
+        $('.out', this)
           .stop()
-          .animate({ top: "0px" }, 300); // move up - show
-        $(".over", this)
+          .animate({ top: '0px' }, 300) // move up - show
+        $('.over', this)
           .stop()
-          .animate({ top: "-48px" }, 300); // move up - hide
+          .animate({ top: '-48px' }, 300) // move up - hide
       }
-    );
+    )
   }
-};
+}
 </script>
 
 // 一定不能加scoped
 <style>
 /** 导入jquery插件的样式 **/
-@import "./statics/site/jquery_plugins/hoverNav/css/style.css";
+@import './statics/site/jquery_plugins/hoverNav/css/style.css';
 
 /** 导入自己的样式 */
-@import "./statics/site/css/style.css";
+@import './statics/site/css/style.css';
 </style>
