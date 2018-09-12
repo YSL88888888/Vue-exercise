@@ -230,6 +230,8 @@
     window.jQuery = $*/
 
 
+
+
     // 3按需导入图钉
     import {Affix} from 'iview'
 
