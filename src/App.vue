@@ -26,7 +26,7 @@
             <a href="" class="">
               <i id="shoppingCartCount" class="iconfont icon-cart"></i>购物车(
               <span>
-                <span>4</span>
+                <span>{{this.$store.getters.getBuyCount}}</span>
               </span>)</a>
           </div>
         </div>

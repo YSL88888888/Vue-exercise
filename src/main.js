@@ -22,9 +22,14 @@ Vue.prototype.$axios = axios
 // 导入过滤器
 import './filters'
 
+/*
+* 状态管理器引入  数据共享
+* */
+import store from './state'
 
 
 new Vue({
     router,
+    store,
     render:h=>h(App)
 }).$mount('#app')

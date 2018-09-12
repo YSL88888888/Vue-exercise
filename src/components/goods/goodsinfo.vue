@@ -119,7 +119,7 @@
                                         </div>
                                         <div class="conn-box">
                                             <div class="editor">
-                                                <!------------------ref使用--------------------------------------->
+                                                <!------------------ref使用   获取要加this--------------------------------------->
                                                 <textarea ref="txtContentRef" id="txtContent" name="txtContent" sucmsg=" "
                                                           datatype="*10-1000" nullmsg="请填写评论内容！"></textarea>
                                                 <span class="Validform_checktip"></span>
@@ -290,6 +290,9 @@
             },
             // 4获取评论数据
             getCommentInfoData() {
+                /*
+                * 路由this
+                * */
                 const url = `site/comment/getbypage/goods/${
                     this.$route.params.goodsid
                     }?pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`
@@ -346,6 +349,15 @@
             // 加入购物车
             addToShopCart() {
                 this.isShow = true
+                /*
+                * 调用store.commit去触发mutations
+                * */
+                const goods={
+                    goodsId:this.$route.params.goodsid,
+                    count:this.goodsCount
+                }
+                this.$store.commit('addGoods',goods)
+
             },
             // 动画相关
             beforeEnter: function(el) {
