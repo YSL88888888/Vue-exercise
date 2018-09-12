@@ -31,4 +31,4 @@ const addLocalGoods=goods=>{
     localStorage.setItem(KEY,JSON.stringify(localGoods))
     return getLocalGoods()
 }
-export {addLocalGoods,getTotalCount}
+export {addLocalGoods,getTotalCount,getLocalGoods}
