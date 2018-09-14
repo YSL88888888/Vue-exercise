@@ -1,3 +1,9 @@
+<!--
+非父子组件传值   login传来值接收
+登出操作 发送数据请求
+
+
+-->
 <template>
   <div>
     <!-- 1.0 头部 -->
@@ -11,16 +17,16 @@
             <a target="_blank" href="#"></a>
           </div>
           <div id="menu" class="right-box">
-            <span style="display: none;">
-              <a href="" class="">登录</a>
+            <span v-show="!isLogin">
+              <router-link to="/login" class="">登录</router-link>
               <strong>|</strong>
               <a href="" class="">注册</a>
               <strong>|</strong>
             </span>
-            <span>
+            <span v-show="isLogin">
               <a href="" class="">会员中心</a>
               <strong>|</strong>
-              <a>退出</a>
+              <a @click="logout">退出</a>
               <strong>|</strong>
             </span>
             <router-link to="/shopcart" class="">
@@ -120,6 +126,10 @@
 </template>
 
 <script>
+
+//非父子父子组件的传值  公用实例的导入   传的数据到app接受
+import {bus} from './common/common'
+
 // 导入jquery
 import $ from 'jquery'
 // 把导入的jquery挂在到window
@@ -132,6 +142,18 @@ import { Affix } from 'iview'
 export default {
   // App template的内容渲染到浏览器之后调用
   components: { Affix },
+    data(){
+      return {
+          isLogin:false
+      }
+    },
+    created(){
+      //非父子组件传值   接收  改变登录状态
+      bus.$on('loginSuccess',()=>{
+          this.isLogin=true
+      })
+
+    },
   mounted() {
     $('#menu2 li a').wrapInner('<span class="out"></span>')
     $('#menu2 li a').each(function() {
@@ -156,7 +178,28 @@ export default {
           .animate({ top: '-48px' }, 300) // move up - hide
       }
     )
-  }
+  },
+    methods:{
+      logout(){
+          this.$confirm('确定退出吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+          }).then(() => {
+              this.$axios.get('site/account/logout').then(response=>{
+                  if(response.data.status === 0){
+                      // 通过编程式导航，跳转到首页
+                      this.$router.push({path:'/goodslist'})
+
+                      // 更改isLogin为false
+                      this.isLogin = false
+                  }
+              })
+          }).catch(() => {
+
+          });
+      }
+    }
 }
 </script>
 

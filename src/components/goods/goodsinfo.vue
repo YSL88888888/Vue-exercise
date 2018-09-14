@@ -264,7 +264,8 @@
             }
         },
         updated() {// data发生了变化并且，视图已经渲染完毕了
-            $('#magnifier1').imgzoon({magnifier: '#magnifier1'})
+
+                $('#magnifier1').imgzoon({magnifier: '#magnifier1'})
         },
 
         methods: {
@@ -354,6 +355,7 @@
                 /*
                 * 调用store.commit去触发mutations
                 * */
+
                 const goods={
                     goodsId:this.$route.params.goodsid,
                     count:this.goodsCount

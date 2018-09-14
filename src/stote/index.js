@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 // 按需导入
-import {addLocalGoods,getTotalCount} from "../common/localStorageTool";
+import {addLocalGoods,getTotalCount,updateGoods,deleteGoodsById} from "../common/localStorageTool";
 
 const store = new Vuex.Store({
 
@@ -19,10 +19,18 @@ const store = new Vuex.Store({
         }
     },
     mutations:{
+        //引入在本地存储后的数据
+        //调用方法 this.$store.commit('addGoods',goods)  goods 传入的参数 可以对象
         addGoods(state,goods){
             // state.buyCount+=goods.count
             state.buyCount = addLocalGoods(goods)
-
+            // console.log(addLocalGoods(goods));
+        },
+        updateGoods(state,goods){
+            state.buyCount=updateGoods(goods)
+        },
+        deleteGoodsById(state,goodsId){
+            state.buyCount=deleteGoodsById(goodsId)
         }
     }
 

@@ -7,7 +7,6 @@
                 <a href="/cart.html">购物车</a>
             </div>
         </div>
-
         <div class="section">
             <div class="wrapper">
                 <div class="bg-wrap">
@@ -54,7 +53,7 @@
                                 <th width="104" align="left">金额(元)</th>
                                 <th width="54" align="center">操作</th>
                             </tr>
-                            <tr v-for="item in goodsList" :key="item.id">
+                            <tr v-for="(item,index) in goodsList" :key="item.id">
                                 <td width="48" align="center">
                                     <el-switch
                                             v-model="item.isSelected"
@@ -73,7 +72,7 @@
                                 </td>
                                 <td width="104" align="left">{{item.sell_price * item.buycount}}</td>
                                 <td width="54" align="center">
-                                    <a href="javascript:void(0)">删除</a>
+                                    <a @click="deleteGoods(item.id,index)">删除</a>
                                 </td>
                             </tr>
                             <tr v-if="goodsList.length === 0">
@@ -106,7 +105,7 @@
                     <div class="cart-foot clearfix">
                         <div class="right-box">
                             <button class="button" onclick="javascript:location.href='/index.html';">继续购物</button>
-                            <button class="submit" onclick="formSubmit(this, '/', '/shopping.html');">立即结算</button>
+                            <button class="submit" @click="goToOrder">立即结算</button>
                         </div>
                     </div>
                     <!--购物车底部-->
@@ -167,7 +166,7 @@
          getGoodsListData() {
              // {87:6,88:2}
              const localGoods = getLocalGoods()
-                    console.log(localGoods)
+                    // console.log(localGoods)
              // 获取对象中的key，用下面方法 返回一个数组[87,88]
              const keys = Object.keys(localGoods)
 
@@ -186,6 +185,8 @@
                  this.goodsList = response.data.message
              })
          },
+
+
          //子向父传值   当id相等时  重新数量赋值
          getChangedGoods(updateGoods){
              this.goodsList.forEach(goods=>{
@@ -193,8 +194,37 @@
                      goods.buycount = updateGoods.count
                  }
              })
-         }
+             const goods={
+                 goodsId:updateGoods.goodsId,
+                 count:updateGoods.count
+             }
+             this.$store.commit('updateGoods',goods)
 
+         },
+         deleteGoods(goodsId,index){
+             this.goodsList.splice(index,1)
+             this.$store.commit('deleteGoodsById',goodsId)
+         },
+         //编程式路由  传值  先拿到要传的数据  提交订单
+         goToOrder(){
+             const ids=[]
+             this.goodsList.forEach(goods=>{
+                 if (goods.isSelected){
+                     ids.push(goods.id)
+                 }
+             })
+             if (ids.length==0){
+                 this.$message({
+                     message: '至少要选择一个商品结算',
+                     type: 'warning'
+                 })
+                 return
+             }
+             // 通过编程式导航跳转到下订单组件
+             this.$router.push({path:'/order',query:{ids:ids.join(',')}})
+
+         }
      }
+
  }
 </script>
