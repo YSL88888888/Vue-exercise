@@ -250,27 +250,34 @@
       this.getGoodsList()
     },
     methods: {
+      //拿大数据渲染页面  跟获取到要提交的数据
+      //没有数量  再根据id 发送请求      再把本地数量取出来然后跟id 整合到一起
       getGoodsList() {
         const url = `site/comment/getshopcargoods/${this.$route.query.ids}`
-
+         //cargoodsobj   拿到商品的id  跟商品数量    提交后台需要
         // {87:3,88:2}
         const localGoods = JSON.parse(localStorage.getItem('goods') || '{}')
+        console.log(localGoods)
 
         // 设置order的goodsids属性及cargoodsobj
+
+        //拿到商品id
         this.order.goodsids = this.$route.query.ids
         // 选择结算的几个，就提交后台几个
         const cargoodsobj = {}
-        // [87,88]
+        // 用split方法把字符串  分割成数组     [87,88]
         const ids = this.order.goodsids.split(',')
+        //便利  数组跟对象到空对象中[87,88,]  {87:6,88:8,99:6}
         ids.forEach(key=>{
           cargoodsobj[key] = localGoods[key]
         })
         this.order.cargoodsobj = cargoodsobj
-
+         //{87:6,88:8}  把有相同key的便利出来
         this.$axios.get(url).then(response => {
           response.data.message.forEach(goods => {
+            //数量   id
             goods.buycount = localGoods[goods.id]
-
+            console.log(response.data.message)
             this.totalCount += goods.buycount
             this.totalPrice += goods.buycount * goods.sell_price
           })
