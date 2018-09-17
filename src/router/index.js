@@ -27,6 +27,12 @@ import order from '../components/order/order'
 //登录页面
 import login from '../components/accout/login'
 
+//付款页面
+import pay from '../components/pay/pay'
+
+//付款完成页面跳转
+import paySuccess from '../components/pay/paySuccess'
+
 // 创建路由对象，设置路由规则，自动注册组件
 const router = new VueRouter({
     routes:[
@@ -35,7 +41,11 @@ const router = new VueRouter({
         {path:'/goodsinfo/:goodsid',component:goodsinfo},
         {path:'/shopcart',component:shopcart},
         {path:'/login',component:login},
-        {path:'/order',meta:{needLogin:true},component:order}
+        {path:'/order',meta:{needLogin:true},component:order},
+        {path:'/pay',meta: { needLogin : true },component:pay},
+      {path:'/paySuccess',meta: { needLogin : true },component:paySuccess}
+
+
     ]
 })
 
@@ -50,13 +60,12 @@ import {bus} from '../common/common'
 
 router.beforeEach((to, from, next) => {
     // ...
-   if (to.fullPath!='/login'){
+   if (to.fullPath!=='/login'){
        localStorage.setItem('lastVisitPath',to.fullPath)
    }
     if(to.meta.needLogin){ // 需要先进行登录判断
         const url = `site/account/islogin`
         axios.get(url).then(response=>{
-            console.log(response.data)
             if(response.data.code === 'logined'){
 
                 //告诉app 登录成功了

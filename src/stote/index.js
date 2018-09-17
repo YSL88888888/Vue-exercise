@@ -19,6 +19,7 @@ const store = new Vuex.Store({
         }
     },
     mutations:{
+//{89:3,88:4}
         //引入在本地存储后的数据
         //调用方法 this.$store.commit('addGoods',goods)  goods 传入的参数 可以对象
         addGoods(state,goods){

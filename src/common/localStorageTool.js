@@ -8,6 +8,10 @@ const getLocalGoods=()=>{
 
 
 //统计本地最新商品数
+/*
+* {goodsId:87,count:3}
+*
+* */
 const getTotalCount = () => {
 
     const localGoods = getLocalGoods()
@@ -26,14 +30,16 @@ const getTotalCount = () => {
 //  没有就添加  有就等于  然后再存起来
 const addLocalGoods=goods=>{
     const localGoods=getLocalGoods()
+    //传过来的goodsId在本地有了就累加
     if(localGoods[goods.goodsId]){
         localGoods[goods.goodsId]+=goods.count
     }else {
+        //没有就等于
         localGoods[goods.goodsId] = goods.count
     }
-
+     //重新存储到本地
     localStorage.setItem(KEY,JSON.stringify(localGoods))
-    return getLocalGoods()
+    return getTotalCount()
 }
 
 
@@ -49,6 +55,7 @@ const updateGoods=(goods)=>{
 
 const deleteGoodsById=goodsId=>{
     const localGoods=getLocalGoods()
+    //    localGoods[87]
     delete localGoods[goodsId]
     localStorage.setItem(KEY,JSON.stringify(localGoods))
     return getLocalGoods()
